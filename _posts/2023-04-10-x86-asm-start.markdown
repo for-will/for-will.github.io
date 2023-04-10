@@ -1,0 +1,75 @@
+---
+layout: post
+title:  "配置x86汇编学习环境"
+date:   2023-04-10 23:37:50 +0800
+categories: 汇编
+---
+
+*创建`mbr.S`文件*
+```s
+mov ax, 0xb800
+mov es, ax
+
+mov byte [es:0x00], 'A'
+mov byte [es:0x02], 'S'
+mov byte [es:0x04], 'M'
+
+infi jmp near infi
+
+times 510-($-$$) db 0
+db 0x55, 0xaa
+```
+
+*编译mbr.S*
+```sh
+nasm -f bin -o boot.bin mbr.S 
+```
+
+### 使用bochs调试
+*创建`bochsrc`:*
+
+运行`bochs`,选择`4. Save options to...`,输入文件名`bochsrc`
+
+*创建bochs的镜像文件*
+```sh
+bximage -func=create -hd=16M -imgmode=flat -sectsize=512 -q master.img
+```
+>The following line should appear in your bochsrc:
+> ata0-master: type=disk, path="master.img", mode=flat
+
+*修改`bochsrc`文件，相应内容*
+```yml
+display_library: sdl2
+boot: disk
+ata0-master: type=disk, path="master.img", mode=flat
+```
+
+*将`boot.bin`写入`master.img`*
+```sh
+dd if=boot.bin of=master.img bs=512 count=1 conv=notrunc
+```
+
+*启动bochs调试*
+```sh
+bochs -q -unlock
+```
+
+*调试命令*
+
+|命令|解释|
+|---|---|
+|b 0x7c00|在内存0x7c00处打断点|
+|s|单步执行|
+|c|继续执行|
+|r|查看通用寄存器|
+|sreg|查看段寄存器|
+|xp 0xb8000|查看内存0xb8000的双字内容|
+|xp/2 0xb8000|查看内存0xb80000处2个双字的内容|
+|q|退出bochs|
+
+### 使用VirtualBox运行
+使用VirtualBox创建虚拟机，并创建vhd格式的虚拟硬盘，虚拟硬盘使用预分配固定大小，再将编译好的boot.bin写入虚拟硬盘
+```sh
+dd if=boot.bin of=MBR.vhd bs=512 count=1 conv=notrunc
+```
+
