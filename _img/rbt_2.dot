@@ -1,0 +1,16 @@
+digraph rbt_2 {
+    graph [nodesep=0.1]
+    node [shape=circle fontsize=9]
+    edge [arrowhead=vee]
+
+    4 [group=4];
+    2;
+    c4 [group=4]
+    8;
+    1;
+    c8, c4, c2 [style=invis]
+    4 -> 2 -> 1
+    4 -> c4 [style=invis]
+    4 -> 8
+    2 -> c2 [style=invis]
+}

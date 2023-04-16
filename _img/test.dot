@@ -1,0 +1,6 @@
+digraph {
+	center = true
+	a -> {b c} 
+	b -> {d e}
+	c -> {f g}
+}
