@@ -31,7 +31,7 @@ categories: 算法 红黑树
 
 怎么调整呢？分情况：
 
-### **case1** x的父节点p是红色，p的兄弟节点p2也是红色
+### **情况1**：x的父节点p是红色，p的兄弟节点p2也是红色
 
 <img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt_3.svg">
 
@@ -49,7 +49,7 @@ categories: 算法 红黑树
 
 **之后的问题：**pp由黑色变成了红色，pp的父节点也有可能是红色，这不满足特征（4），所以还需要处理pp节点
 
-### **case2** x的父节点p是红色，p的兄弟节点p2不是红色
+### **情况2**：x的父节点p是红色，p的兄弟节点p2不是红色
 
 <img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt2_0.svg">
 
@@ -61,12 +61,13 @@ categories: 算法 红黑树
 
 右旋操作前后(已修改p和pp的颜色)：
 
-<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt2_1.svg">
------->
-<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt2_2.svg">
+|BEFORE|AFTER|
+|:----:|:---:|
+|<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt2_1.svg">|<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt2_2.svg">|
 
-**右旋(pp)：**可以看成当前是由pp(节点)、p(节点)、p2(子树)、x(子树)、y(子树)构成的一棵树，右旋之前pp是这个树的根，右旋之后pp的左子节点p是这个树的根。p的右子树y成为pp的左子树；pp成为p的右子树；文字描述不容易理解，看图或者看代码都很直白。<br>
-**右旋(pp)达到了什么目的：**使p2路径上的黑色结点数+1，其它路径上的黑色结点数不变。<br>
+**右旋(pp)：**可以看成当前是由pp(节点)、p(节点)、p2(子树)、x(子树)、y(子树)构成的一棵树，右旋之前pp是这个树的根，右旋之后pp的左子节点p是这个树的根。p的右子树y成为pp的左子树；pp成为p的右子树；文字描述不容易理解，看图或者看代码都很直白。
+
+**右旋(pp)达到了什么目的：**使p2路径上的黑色结点数+1，其它路径上的黑色结点数不变。
 * 我们用`Height(x)`表示从x到其任一叶子节点路径上黑色节点数量，右旋操作前x路径上的黑色节点数为`Height(x)+p+pp`，p是黑色，pp是红色，等价于`Height(x)+1+0`。右旋之后x路径上黑色节点数为`Height(x)+p`,等价于`Height(x)+1`。右旋操作前后的数量相等。
 * 我们用`Height(y)`表示从y到其任一叶子节点路径上黑色节点数量，右旋操作前y路径上的黑色节点数为`Height(y)+p+pp`，p是黑色，pp是红色，等价于`Height(y)+1+0`。右旋之后x路径上黑色节点数为`Height(y)+pp+p`,等价于`Height(y)+0+1`。右旋操作前后的数量相等。
 * 我们用`Height(p2)`表示从p2到其任一叶子节点路径上黑色节点数量，右旋操作前p2路径上的黑色节点数为`Height(p2)+pp`，p是黑色，pp是红色，等价于`Height(y)+0`。右旋之后p2路径上黑色节点数为`Height(p2)+pp+p`,等价于`Height(y)+0+1`。右旋之后黑色节点数+1。
