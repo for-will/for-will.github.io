@@ -59,12 +59,10 @@ categories: 算法 红黑树
 3：**right_rotate(pp)**，pp变成红色后，p2路径上的黑色节点数少了一个，为了平衡，对pp结点进行右旋<br>
 神奇的操作出现了：**什么是右旋？右旋之后是什么样子的？**
 
-右旋操作之前（已经修改了p和pp的颜色）：
+右旋操作前后(已修改p和pp的颜色)：
 
 <img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt2_1.svg">
-
-右旋之后：
-
+------>
 <img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt2_2.svg">
 
 **右旋(pp)：**可以看成当前是由pp(节点)、p(节点)、p2(子树)、x(子树)、y(子树)构成的一棵树，右旋之前pp是这个树的根，右旋之后pp的左子节点p是这个树的根。p的右子树y成为pp的左子树；pp成为p的右子树；文字描述不容易理解，看图或者看代码都很直白。<br>
@@ -75,7 +73,7 @@ categories: 算法 红黑树
 
 **右旋之后依然是一棵二叉查找树：** 看图便知，`x<p<y<pp<p2`，右旋操作之后这棵树依然满足`如果当前结点为x,x的左子树的所有有结点都比x的值小，x的右子树的所有节点都比x的值大`的大小位置关系。
 
-对应nginx中`ngx_rbtree.c`的代码：
+p2路径上少的那一个黑色节点弥补回来了，一切又平衡了。对应nginx中`ngx_rbtree.c`的代码：
 ```c
 ngx_rbt_black(node->parent);
 ngx_rbt_red(node->parent->parent);
