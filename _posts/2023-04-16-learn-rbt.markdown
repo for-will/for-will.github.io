@@ -8,16 +8,16 @@ categories: 算法 红黑树
 
 **二叉查找树**: 如果当前结点为x,x的左子树的所有有结点都比x的值小，x的右子树的所有节点都比x的值大, 如下图这样<br>
 
-<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/rbt_2.svg">
+<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt_2.svg">
 
 
 **一个糟糕二叉查找树**: 但也有可能是下图这样的，这和一个链表没什么区别了<br>
 
-<img src="../_img/rbt_1.svg">
+<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt_1.svg">
 
 红黑树的目的就是实现一个自平衡的二叉查找树
 
-### 红黑树的特征
+## 红黑树的特征
 (1) 每个节点或者是黑色，或者是红色。<br>
 (2) 根节点是黑色。<br>
 (3) 每个叶子节点是黑色。 [注意：这里叶子节点，是指为空的叶子节点！]<br>
@@ -25,19 +25,19 @@ categories: 算法 红黑树
 (5) 从一个节点到该节点的子孙节点的所有路径上包含相同数目的黑节点。<br>
 
 
-### 插入新的节点`x`后
+## 插入新的节点`x`后
 
 新插入的节点都标记为红色，插入后，如果`x`结点的父节点`p`是黑色，那么新的树依然满足红黑树的5个特征，如果父节点`p`是红色,则不满足特征`(4) 如果一个节点是红色的，则它的子节点必须是黑色的`（p是红色的，p的子节点x也是红色的）,需要做相应的调整
 
 怎么调整呢？分情况：
 
-#### 1. x的父节点p是红色，p的兄弟节点p2也是红色
+### **case1** x的父节点p是红色，p的兄弟节点p2也是红色
 
-<img src="../_img/rbt_3.svg">
+<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt_3.svg">
 
 这种情况最简单，只需要`p.color=black;p2.color=black;pp.color=red`。将父节点和父节点的兄弟节点改成黑色，祖父节点改为红色。修改之后：
 
-<img src="../_img/rbt_4.svg">
+<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt_4.svg">
 
 **为什么这样可以？**：x和p不能都为红色，那就把其中一个改成黑色。改谁呢？
 
@@ -48,3 +48,36 @@ categories: 算法 红黑树
 **为什么不改x?**:如果把x改成黑色，则x到root路径上的黑色节总数比别的叶子节点到root路径上的黑色节点总数多1个，不满足特征`(5) 从一个节点到该节点的子孙节点的所有路径上包含相同数目的黑节点。`
 
 **之后的问题：**pp由黑色变成了红色，pp的父节点也有可能是红色，这不满足特征（4），所以还需要处理pp节点
+
+### **case2** x的父节点p是红色，p的兄弟节点p2不是红色
+
+<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt2_0.svg">
+
+还是一样的思路：<br>
+1：**p.color=black**，p和x不能同时为红色，那就把p改成黑色<br>
+2：**pp.color=red**，p变成黑色后，p路径上的黑色节点数多了一个，为了平衡，把pp变成红色<br>
+3：**right_rotate(pp)**，pp变成红色后，p2路径上的黑色节点数少了一个，为了平衡，对pp结点进行右旋<br>
+神奇的操作出现了：**什么是右旋？右旋之后是什么样子的？**
+
+右旋操作之前（已经修改了p和pp的颜色）：
+
+<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt2_1.svg">
+
+右旋之后：
+
+<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt2_2.svg">
+
+**右旋(pp)：**可以看成当前是由pp(节点)、p(节点)、p2(子树)、x(子树)、y(子树)构成的一棵树，右旋之前pp是这个树的根，右旋之后pp的左子节点p是这个树的根。p的右子树y成为pp的左子树；pp成为p的右子树；文字描述不容易理解，看图或者看代码都很直白。<br>
+**右旋(pp)达到了什么目的：**使p2路径上的黑色结点数+1，其它路径上的黑色结点数不变。<br>
+* 我们用`Height(x)`表示从x到其任一叶子节点路径上黑色节点数量，右旋操作前x路径上的黑色节点数为`Height(x)+p+pp`，p是黑色，pp是红色，等价于`Height(x)+1+0`。右旋之后x路径上黑色节点数为`Height(x)+p`,等价于`Height(x)+1`。右旋操作前后的数量相等。
+* 我们用`Height(y)`表示从y到其任一叶子节点路径上黑色节点数量，右旋操作前y路径上的黑色节点数为`Height(y)+p+pp`，p是黑色，pp是红色，等价于`Height(y)+1+0`。右旋之后x路径上黑色节点数为`Height(y)+pp+p`,等价于`Height(y)+0+1`。右旋操作前后的数量相等。
+* 我们用`Height(p2)`表示从p2到其任一叶子节点路径上黑色节点数量，右旋操作前p2路径上的黑色节点数为`Height(p2)+pp`，p是黑色，pp是红色，等价于`Height(y)+0`。右旋之后p2路径上黑色节点数为`Height(p2)+pp+p`,等价于`Height(y)+0+1`。右旋之后黑色节点数+1。
+
+**右旋之后依然是一棵二叉查找树：** 看图便知，`x<p<y<pp<p2`，右旋操作之后这棵树依然满足`如果当前结点为x,x的左子树的所有有结点都比x的值小，x的右子树的所有节点都比x的值大`的大小位置关系。
+
+对应nginx中`ngx_rbtree.c`的代码：
+```c
+ngx_rbt_black(node->parent);
+ngx_rbt_red(node->parent->parent);
+ngx_rbtree_right_rotate(root, sentinel, node->parent->parent);
+```

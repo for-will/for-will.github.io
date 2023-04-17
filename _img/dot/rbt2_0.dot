@@ -6,7 +6,7 @@ digraph G {
     pp [group=pp]
     p [group=p fillcolor="red"]
     _pp [group=pp style=invis]
-    p2 [fillcolor="red"];
+    p2 [style="dashed,filled"];
     x [shape=doublecircle fillcolor="red"];
     _p [group=p label="" width=0 style=invis]
 
@@ -16,4 +16,7 @@ digraph G {
     
     p -> x
     p -> _p [style=invis]
+    y [style="dashed,filled"]
+    p -> y
+    
 }

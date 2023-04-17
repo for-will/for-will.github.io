@@ -1,6 +1,6 @@
-DOTSRC=$(wildcard *.dot)
-SVGOUT=$(DOTSRC:%.dot=%.svg)
+DOTSRC=$(wildcard dot/*.dot)
+SVGOUT=$(DOTSRC:dot/%.dot=svg/%.svg)
 all: $(SVGOUT)
 
-%.svg: %.dot
+svg/%.svg: dot/%.dot
 	dot -Tsvg -o $@ $<
