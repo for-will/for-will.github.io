@@ -7,11 +7,10 @@ tags: 算法 红黑树
 
 
 **二叉查找树**: 如果当前结点为x,x的左子树的所有有结点都比x的值小，x的右子树的所有节点都比x的值大, 如下图这样<br>
-![](/_img/svg/rbt_2.svg)
-<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt_2.svg">
+![](/img/svg/rbt_2.svg)
 
 **一个糟糕二叉查找树**: 一个二叉查找树也有可能是下图这样的，这和一个链表没什么区别了<br>
-<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt_1.svg">
+![](/img/svg/rbt_1.svg)
 
 红黑树的目的就是实现一个自平衡的二叉查找树
 

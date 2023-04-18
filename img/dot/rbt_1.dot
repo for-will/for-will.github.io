@@ -1,0 +1,15 @@
+digraph G {
+    graph [nodesep=0.1]
+    node [shape=circle fontsize=9]
+    edge [arrowhead=vee]
+
+    8 [group=8]
+    4;
+    2;
+    1;
+    c8, c4, c2 [style=invis]
+    8 -> 4 -> 2-> 1
+    8 -> c8 [style=invis]
+    4 -> c4 [style=invis]
+    2 -> c2 [style=invis]
+}
