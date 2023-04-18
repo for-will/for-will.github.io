@@ -1,0 +1,30 @@
+digraph G {
+    graph [nodesep=0.1]
+    node [shape=circle style="filled" fillcolor="#444444" fontcolor="white" fontsize=9 fixedsize=true]
+    edge [arrowhead=vee]        
+    
+    p2  [style="dashed,filled"]
+    _pp [group=pp style=invis label="" width=0]    
+    x   [group=x shape=doublecircle]
+
+    x_L [style="dashed,filled" label="x-left"]
+    pp  [group=pp fillcolor="red"]
+    _x  [group=x label="" width=0 style=invis]
+    p   [group=p fillcolor="red"]
+
+    x_R [style="dashed,filled" label="x-right"]
+    _p  [group=p label="" width=0 style=invis]
+    y   [style="dashed,filled"]
+    
+    pp -> p2
+    pp -> _pp [style=invis]
+    pp -> x_L
+
+    x -> pp
+    x -> _x  [style=invis]
+    x -> p
+    
+    p -> x_R
+    p -> _p [style=invis]
+    p -> y
+}

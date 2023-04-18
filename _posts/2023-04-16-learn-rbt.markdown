@@ -46,7 +46,7 @@ tags: 算法 红黑树
 
 **之后的问题：**pp由黑色变成了红色，pp的父节点也有可能是红色，这不满足特征（4），所以还需要处理pp节点
 
-### **情况2**：x的父节点p是红色，p的兄弟节点p2不是红色，x是p的左子树
+### **情况2**：`x的父节点p是红色，p的兄弟节点p2不是红色`，x是p的左子树，p是pp的左子树
 
 ![](/img/svg/rbt2_0.svg)
 
@@ -78,7 +78,7 @@ ngx_rbt_red(node->parent->parent);
 ngx_rbtree_right_rotate(root, sentinel, node->parent->parent);
 ```
 
-### **情况3**：x的父节点p是红色，p的兄弟节点p2不是红色，x是p的右子树
+### **情况3**：`x的父节点p是红色，p的兄弟节点p2不是红色`，x是p的右子树，p是pp的左子树
 
 |情况3|对p左旋后|
 |:---:|:---:|
@@ -105,3 +105,25 @@ ngx_rbtree_right_rotate(root, sentinel, node->parent->parent);
 |初始状态|对p左旋后|按情况2处理p后|
 |:---:|:-----:|:--------:|
 |![](/img/svg/rbt3_0.svg)|![](/img/svg/rbt3_1.svg)|![](/img/svg/rbt3_2.svg)|
+
+### **情况4**：`x的父节点p是红色，p的兄弟节点p2不是红色`，x是p的右子树，p是pp的右子树
+
+|初始状态|对pp左旋后|
+|:-----:|:-----:|
+|![](/img/svg/rbt4_0.svg)|![](/img/svg/rbt4_1.svg)|
+
+### **情况5**：`x的父节点p是红色，p的兄弟节点p2不是红色`，x是p的左子树，p是pp的右子树
+
+|初始状态|对p右旋后|按情况4处理p后|
+|:-----:|:------:|:----------:|
+|![](/img/svg/rbt5_0.svg)|![](/img/svg/rbt5_1.svg)|![](/img/svg/rbt5_2.svg)|
+
+### 总结
+
+把5种情况放在一起总结一下
+
+|*      |情况1 |情况2|情况3 |情况4 |情况5|
+|:-----:|:---:|:---:|:---:|:---:|:---:|
+|初始状态|![](/img/svg/rbt1_0.svg)|![](/img/svg/rbt2_0.svg)|![](/img/svg/rbt3_0.svg)|![](/img/svg/rbt4_0.svg)|![](/img/svg/rbt5_0.svg)|
+|操作|情况1 |情况2|情况3 |情况4 |情况5|
+|操作后状态|![](/img/svg/rbt1_1.svg)|![](/img/svg/rbt2_2.svg)|![](/img/svg/rbt3_1.svg)|![](/img/svg/rbt4_1.svg)|![](/img/svg/rbt5_1.svg)|
