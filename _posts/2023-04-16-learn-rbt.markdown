@@ -30,11 +30,11 @@ tags: 算法 红黑树
 
 ### **情况1**：x的父节点p是红色，p的兄弟节点p2也是红色
 
-<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt_3.svg">
+![](/img/svg/rbt_3.svg)
 
 这种情况最简单，只需要`p.color=black;p2.color=black;pp.color=red`。将父节点和父节点的兄弟节点改成黑色，祖父节点改为红色。修改之后：
 
-<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt_4.svg">
+![](/img/svg/rbt_4.svg)
 
 **为什么这样可以？**：x和p不能都为红色，那就把其中一个改成黑色。改谁呢？
 
@@ -46,9 +46,9 @@ tags: 算法 红黑树
 
 **之后的问题：**pp由黑色变成了红色，pp的父节点也有可能是红色，这不满足特征（4），所以还需要处理pp节点
 
-### **情况2**：x的父节点p是红色，p的兄弟节点p2不是红色
+### **情况2**：x的父节点p是红色，p的兄弟节点p2不是红色，x是p的左子树
 
-<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt2_0.svg">
+![](/img/svg/rbt2_0.svg)
 
 还是一样的思路：<br>
 1：**p.color=black**，p和x不能同时为红色，那就把p改成黑色<br>
@@ -60,7 +60,7 @@ tags: 算法 红黑树
 
 |BEFORE|AFTER|
 |:----:|:---:|
-|<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt2_1.svg">|<img src="https://raw.githubusercontent.com/for-will/for-will.github.io/main/_img/svg/rbt2_2.svg">|
+|![](/img/svg/rbt2_1.svg)|![](/img/svg/rbt2_2.svg)|
 
 **右旋(pp)：**可以看成当前是由pp(节点)、p(节点)、p2(子树)、x(子树)、y(子树)构成的一棵树，右旋之前pp是这个树的根，右旋之后pp的左子节点p是这个树的根。p的右子树y成为pp的左子树；pp成为p的右子树；文字描述不容易理解，看图或者看代码都很直白。
 
@@ -77,3 +77,31 @@ ngx_rbt_black(node->parent);
 ngx_rbt_red(node->parent->parent);
 ngx_rbtree_right_rotate(root, sentinel, node->parent->parent);
 ```
+
+### **情况3**：x的父节点p是红色，p的兄弟节点p2不是红色，x是p的右子树
+
+|情况3|对p左旋后|
+|:---:|:---:|
+|![](/img/svg/rbt3_0.svg)|![](/img/svg/rbt3_1.svg)|
+
+对于这种情况，对x的父节点p进行右旋，进而转化成[情况2](#情况2x的父节点p是红色p的兄弟节点p2不是红色x是p的左子树)。
+
+**什么是右旋？右旋后是什么样子的？**当前我们只关注p子树：即p和p所有的子孙节点构成的树，对应图中的p、y、x、x-left、x-right。（边是虚线的节点表示那个节点可能是一个`sentinel`哨兵节点，也有可能是一个普通节点，节点的子节点并没有画出来）
+
+**左旋（p）**：根节点的p的右子节点x成为新的根节点，p成为x的左子节点，x的左子节点x-left成为p的右子节点。
+
+**左旋之后依然是一棵二叉查找树**：左旋之后大小位置关系依然满足二叉查找树的特征，`y < p < x-left < x < x-right`
+
+**左旋之后每个叶子节点到根节点路径上黑色节点的数量没有变化**：还是用Height(x)表示x到任一叶子节点路径上黑色节点的数量
+
+|节点路径|左旋前黑色节点数|左旋后黑色节点数|
+|:-----:|:-----------:|:-----------:|
+|y|`Height(y)+p`<br>=><br>`Height(y)+0`|`Height(y)+p+x`<br>=><br>`Height(y)+0+0`|
+|x-left|`Height(x-left)+x+p`<br>=><br>`Height(x-left)+0+0`|`Height(x-left)+p+x`<br>=><br>`Height(x-left)+0+0`|
+|x-right|`Height(x-right)+x+p`<br>=><br>`Height(x-right)+0+0`|`Height(x-right)+x`<br>=><br>`Height(x-right)+0`|
+
+**左旋之后的问题**：左旋没有改变树的黑色节点高度，也没有改变是一棵二叉查找树的位置特征，但也没解决**红色节点的子节点不能是红色**的问题。现在p是x的左子节点，p和x都是红色，那左旋有什么作用呢？左旋之后：对于p节点，其父节点是红色，父节点的兄弟节点不是红色，并且p是父节点的左子节点，这不就是情况2吗？接下来只需对p节点按照[情况2](#情况2x的父节点p是红色p的兄弟节点p2不是红色x是p的左子树)处理。最后看一下图：
+
+|初始状态|对p左旋后|按情况2处理p后|
+|:---:|:-----:|:--------:|
+|![](/img/svg/rbt3_0.svg)|![](/img/svg/rbt3_1.svg)|![](/img/svg/rbt3_2.svg)|
