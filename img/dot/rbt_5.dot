@@ -6,28 +6,64 @@ digraph G {
     60 -> 20
     10 [group=10 fillcolor="#444444"]
     20 -> 10
-    h20 [group=20 style=invis]
+    sentinel_l10 [style = "dashed,filled";label = "NIL";];
+    10 -> sentinel_l10;
+    h10 [group=10 style=invis label="" width=0]
+    10 -> h10 [style=invis]
+    sentinel_r10 [style = "dashed,filled";label = "NIL";];
+    10 -> sentinel_r10;
+    h20 [group=20 style=invis label="" width=0]
     20 -> h20 [style=invis]
     40 [group=40 fillcolor="#444444"]
     20 -> 40
     30 [group=30 fillcolor="red"]
     40 -> 30
-    h40 [group=40 style=invis]
+    sentinel_l30 [style = "dashed,filled";label = "NIL";];
+    30 -> sentinel_l30;
+    h30 [group=30 style=invis label="" width=0]
+    30 -> h30 [style=invis]
+    sentinel_r30 [style = "dashed,filled";label = "NIL";];
+    30 -> sentinel_r30;
+    h40 [group=40 style=invis label="" width=0]
     40 -> h40 [style=invis]
     50 [group=50 fillcolor="red"]
     40 -> 50
-    h60 [group=60 style=invis]
+    sentinel_l50 [style = "dashed,filled";label = "NIL";];
+    50 -> sentinel_l50;
+    h50 [group=50 style=invis label="" width=0]
+    50 -> h50 [style=invis]
+    sentinel_r50 [style = "dashed,filled";label = "NIL";];
+    50 -> sentinel_r50;
+    h60 [group=60 style=invis label="" width=0]
     60 -> h60 [style=invis]
     90 [group=90 fillcolor="red"]
     60 -> 90
     70 [group=70 fillcolor="#444444"]
     90 -> 70
-    h70 [group=70 style=invis]
+    sentinel_l70 [style = "dashed,filled";label = "NIL";];
+    70 -> sentinel_l70;
+    h70 [group=70 style=invis label="" width=0]
     70 -> h70 [style=invis]
     80 [group=80 fillcolor="red"]
     70 -> 80
-    h90 [group=90 style=invis]
+    sentinel_l80 [style = "dashed,filled";label = "NIL";];
+    80 -> sentinel_l80;
+    h80 [group=80 style=invis label="" width=0]
+    80 -> h80 [style=invis]
+    sentinel_r80 [style = "dashed,filled";label = "NIL";];
+    80 -> sentinel_r80;
+    h90 [group=90 style=invis label="" width=0]
     90 -> h90 [style=invis]
     110 [group=110 fillcolor="#444444"]
     90 -> 110
+    sentinel_l110 [style = "dashed,filled";label = "NIL";];
+    110 -> sentinel_l110;
+    h110 [group=110 style=invis label="" width=0]
+    110 -> h110 [style=invis]
+    sentinel_r110 [style = "dashed,filled";label = "NIL";];
+    110 -> sentinel_r110;
+
+    { rank=same; sentinel_l30 h20 h40 h60};
+    { rank=same; sentinel_r80 h90};
+    { rank=same; h70 sentinel_l80};
 }

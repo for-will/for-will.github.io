@@ -1,0 +1,42 @@
+---
+layout: post
+title: "使用BIOS int 10h输出字符串"
+date: 2023-06-13 15:25:49 +0800
+tags: nasm bios
+---
+使用int 0x10的 0号功能可以快速将屏幕清空；AH=0x13用于显示字符串，具体文档参考[wiki](https://en.wikipedia.org/wiki/INT_10H)
+
+
+**测试代码**
+
+```nasm
+BOOTSEQ  equ 0x7c0
+
+jmp BOOTSEQ:go
+
+go:
+mov ax, cs
+mov ds, ax
+mov es, ax
+
+clear_screen:
+mov ah, 0           ; Set video mode
+mov al, 0x03        ; AL = video mode
+int 0x10
+
+show_msg1:
+xor dx, dx          ; DH = Row, DL = Column
+mov cx, 9           ; CX = Number of characters in string
+mov bh, 0x00        ; BH = Page Number
+mov bl, 0x03        ; BL = Color ; 0x03 = Cyan
+mov bp, msg1        ; ES:BP = Offset of string
+mov ah, 0x13        ; Write string (EGA+, meaning PC AT minimum)
+mov al, 0x01        ; AL = Write mode
+int 0x10
+hlt
+
+msg1:
+db 0x0d, 0x0a, 'Loading'
+times 510-($-$$) db 0x00
+db 0x55, 0xaa
+```

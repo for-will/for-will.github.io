@@ -1,0 +1,33 @@
+digraph G {
+    graph [nodesep = 0.1;];
+    node [shape = circle; fontsize = 9; fixedsize = true;];
+    edge [arrowhead = vee;];
+    
+    
+    
+    30 [group = 30;];
+    
+    20;
+    h30 [group = 30;style = invis;width = 0;];
+    50 [group = 50;];
+    
+    40;
+    h50 [group = 50;style = invis;width = 0;];
+    70;
+    
+    60;
+    h70 [group = 70;style = invis;width = 0;];
+    80;
+    
+    30 -> 20;
+    30 -> h30 [style = invis;];
+    30 -> 50;
+    
+    50 -> 40;
+    50 -> h50 [style = invis;];
+    50 -> 70;
+    
+    70 -> 60;
+    70 -> h70 [style = invis;];
+    70 -> 80;
+}

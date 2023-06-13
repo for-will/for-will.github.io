@@ -1,0 +1,37 @@
+digraph G {
+    graph [nodesep = 0.1;];
+    node [shape = circle; style = "filled"; fillcolor = "#444444"; fontcolor = "white"; fontsize = 9;];
+    edge [arrowhead = vee;];
+    20 [group = 20;fillcolor = "red";];
+    70 [group = 70;];
+    70 -> 20;
+    10 [group = 10;fillcolor = "#444444";];
+    20 -> 10;
+    h20 [group = 20;style = invis;];
+    20 -> h20 [style = invis;];
+    40 [group = 40;fillcolor = "#444444";];
+    20 -> 40;
+    30 [group = 30;fillcolor = "red";];
+    40 -> 30;
+    h40 [group = 40;style = invis;];
+    40 -> h40 [style = invis;];
+    50 [group = 50;fillcolor = "red";];
+    40 -> 50;
+    h70 [group = 70;style = invis;label = "";width = 0;];
+    70 -> h70 [style = invis;];
+    90 [group = 90;fillcolor = "red";];
+    70 -> 90;
+    80 [group = 80;fillcolor = "red";shape = "doublecircle";];
+    90 -> 80;
+    h90 [group = 90;style = invis;];
+    90 -> h90 [style = invis;];
+    110 [group = 110;fillcolor = "#444444";];
+    90 -> 110;
+    
+    l80 [style = invis;];
+    80 -> l80 [style = invis;];
+    h80 [group = 80;style = invis;];
+    80 -> h80 [style = invis;];
+    
+    { rank=same; h70 50};
+}

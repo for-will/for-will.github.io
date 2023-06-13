@@ -58,9 +58,9 @@ tags: 算法 红黑树
 
 右旋操作前后(已修改p和pp的颜色)：
 
-|BEFORE|AFTER|
-|:----:|:---:|
-|![](/img/svg/rbt2_1.svg)|![](/img/svg/rbt2_2.svg)|
+|          BEFORE          |          AFTER           |
+| :----------------------: | :----------------------: |
+| ![](/img/svg/rbt2_1.svg) | ![](/img/svg/rbt2_2.svg) |
 
 **右旋(pp)：**可以看成当前是由pp(节点)、p(节点)、p2(子树)、x(子树)、y(子树)构成的一棵树，右旋之前pp是这个树的根，右旋之后pp的左子节点p是这个树的根。p的右子树y成为pp的左子树；pp成为p的右子树；文字描述不容易理解，看图或者看代码都很直白。
 
@@ -80,9 +80,9 @@ ngx_rbtree_right_rotate(root, sentinel, node->parent->parent);
 
 ### **情况3**：`x的父节点p是红色，p的兄弟节点p2不是红色`，x是p的右子树，p是pp的左子树
 
-|情况3|对p左旋后|
-|:---:|:---:|
-|![](/img/svg/rbt3_0.svg)|![](/img/svg/rbt3_1.svg)|
+|          情况3           |        对p左旋后         |
+| :----------------------: | :----------------------: |
+| ![](/img/svg/rbt3_0.svg) | ![](/img/svg/rbt3_1.svg) |
 
 对于这种情况，对x的父节点p进行右旋，进而转化成[情况2](#情况2x的父节点p是红色p的兄弟节点p2不是红色x是p的左子树)。
 
@@ -94,36 +94,141 @@ ngx_rbtree_right_rotate(root, sentinel, node->parent->parent);
 
 **左旋之后每个叶子节点到根节点路径上黑色节点的数量没有变化**：还是用Height(x)表示x到任一叶子节点路径上黑色节点的数量
 
-|节点路径|左旋前黑色节点数|左旋后黑色节点数|
-|:-----:|:-----------:|:-----------:|
-|y|`Height(y)+p`<br>=><br>`Height(y)+0`|`Height(y)+p+x`<br>=><br>`Height(y)+0+0`|
-|x-left|`Height(x-left)+x+p`<br>=><br>`Height(x-left)+0+0`|`Height(x-left)+p+x`<br>=><br>`Height(x-left)+0+0`|
-|x-right|`Height(x-right)+x+p`<br>=><br>`Height(x-right)+0+0`|`Height(x-right)+x`<br>=><br>`Height(x-right)+0`|
+| 节点路径 |                   左旋前黑色节点数                   |                  左旋后黑色节点数                  |
+| :------: | :--------------------------------------------------: | :------------------------------------------------: |
+|    y     |         `Height(y)+p`<br>=><br>`Height(y)+0`         |      `Height(y)+p+x`<br>=><br>`Height(y)+0+0`      |
+|  x-left  |  `Height(x-left)+x+p`<br>=><br>`Height(x-left)+0+0`  | `Height(x-left)+p+x`<br>=><br>`Height(x-left)+0+0` |
+| x-right  | `Height(x-right)+x+p`<br>=><br>`Height(x-right)+0+0` |  `Height(x-right)+x`<br>=><br>`Height(x-right)+0`  |
 
 **左旋之后的问题**：左旋没有改变树的黑色节点高度，也没有改变是一棵二叉查找树的位置特征，但也没解决**红色节点的子节点不能是红色**的问题。现在p是x的左子节点，p和x都是红色，那左旋有什么作用呢？左旋之后：对于p节点，其父节点是红色，父节点的兄弟节点不是红色，并且p是父节点的左子节点，这不就是情况2吗？接下来只需对p节点按照[情况2](#情况2x的父节点p是红色p的兄弟节点p2不是红色x是p的左子树)处理。最后看一下图：
 
-|初始状态|对p左旋后|按情况2处理p后|
-|:---:|:-----:|:--------:|
-|![](/img/svg/rbt3_0.svg)|![](/img/svg/rbt3_1.svg)|![](/img/svg/rbt3_2.svg)|
+|         初始状态         |        对p左旋后         |      按情况2处理p后      |
+| :----------------------: | :----------------------: | :----------------------: |
+| ![](/img/svg/rbt3_0.svg) | ![](/img/svg/rbt3_1.svg) | ![](/img/svg/rbt3_2.svg) |
 
 ### **情况4**：`x的父节点p是红色，p的兄弟节点p2不是红色`，x是p的右子树，p是pp的右子树
 
-|初始状态|对pp左旋后|
-|:-----:|:-----:|
-|![](/img/svg/rbt4_0.svg)|![](/img/svg/rbt4_1.svg)|
+|         初始状态         |         目标状态         |
+| :----------------------: | :----------------------: |
+| ![](/img/svg/rbt4_0.svg) | ![](/img/svg/rbt4_1.svg) |
+
+与情况2类似，只需将p置为黑色，pp置为红色，然后对pp进行进行左旋（情况2是对pp进行右旋）。
 
 ### **情况5**：`x的父节点p是红色，p的兄弟节点p2不是红色`，x是p的左子树，p是pp的右子树
 
-|初始状态|对p右旋后|按情况4处理p后|
-|:-----:|:------:|:----------:|
-|![](/img/svg/rbt5_0.svg)|![](/img/svg/rbt5_1.svg)|![](/img/svg/rbt5_2.svg)|
+|         初始状态         |        对p右旋后         |      按情况4处理p后      |
+| :----------------------: | :----------------------: | :----------------------: |
+| ![](/img/svg/rbt5_0.svg) | ![](/img/svg/rbt5_1.svg) | ![](/img/svg/rbt5_2.svg) |
 
-### 总结
+与情况3类似，对p节点进行右旋（情况2是对p进行左旋），就可以转化成情况4，然后按[情况4](#情况4x的父节点p是红色p的兄弟节点p2不是红色x是p的右子树p是pp的右子树)处理节点p。
+
+### 总结：五种情况
 
 把5种情况放在一起总结一下
 
-|*      |情况1 |情况2|情况3 |情况4 |情况5|
-|:-----:|:---:|:---:|:---:|:---:|:---:|
-|初始状态|![](/img/svg/rbt1_0.svg)|![](/img/svg/rbt2_0.svg)|![](/img/svg/rbt3_0.svg)|![](/img/svg/rbt4_0.svg)|![](/img/svg/rbt5_0.svg)|
-|操作|情况1 |情况2|情况3 |情况4 |情况5|
-|操作后状态|![](/img/svg/rbt1_1.svg)|![](/img/svg/rbt2_2.svg)|![](/img/svg/rbt3_1.svg)|![](/img/svg/rbt4_1.svg)|![](/img/svg/rbt5_1.svg)|
+|     *      | 情况1                                                 | 情况2                                                   | 情况3                    | 情况4                                                  | 情况5                    |
+| :--------: | :---------------------------------------------------- | :------------------------------------------------------ | :----------------------- | :----------------------------------------------------- | :----------------------- |
+|  初始状态  | ![](/img/svg/rbt1_0.svg)                              | ![](/img/svg/rbt2_0.svg)                                | ![](/img/svg/rbt3_0.svg) | ![](/img/svg/rbt4_0.svg)                               | ![](/img/svg/rbt5_0.svg) |
+|    操作    | `p.color=black`<br>`p2.color=black`<br>`pp.color=red` | `p.color=black`<br>`pp.color=red`<br>`right_rotate(pp)` | `left_rotate(p)`         | `p.color=black`<br>`pp.color=red`<br>`left_rotate(pp)` | `right_rotate(p)`        |
+| 操作后状态 | ![](/img/svg/rbt1_1.svg)                              | ![](/img/svg/rbt2_2.svg)                                | ![](/img/svg/rbt3_1.svg) | ![](/img/svg/rbt4_1.svg)                               | ![](/img/svg/rbt5_1.svg) |
+|   下一步   | `FIXUP(pp)`                                           | 无                                                      | 按情况2 `FIXUP(p)`       | 无                                                     | 打情况4 `FIXUP(p)`       |
+
+从图中不难看出来，情况2和情况4很相似，是左右对称的，对应的操作也是一个右旋一个左旋。情况3和情况5很相似，两种情况的图形也是左右对称，对应的操作一个左旋一个右旋。
+
+对应nginx中相关的代码：
+
+```c
+void
+ngx_rbtree_insert(ngx_rbtree_t *tree, ngx_rbtree_node_t *node)
+{
+    ngx_rbtree_node_t  **root, *temp, *sentinel;
+
+    /* a binary tree insert */
+
+    root = &tree->root;
+    sentinel = tree->sentinel;
+
+    if (*root == sentinel) {
+        node->parent = NULL;
+        node->left = sentinel;
+        node->right = sentinel;
+        ngx_rbt_black(node);
+        *root = node;
+
+        return;
+    }
+
+    tree->insert(*root, node, sentinel);
+
+    /* re-balance tree */
+
+    while (node != *root && ngx_rbt_is_red(node->parent)) {
+
+        if (node->parent == node->parent->parent->left) {
+            temp = node->parent->parent->right;
+
+            if (ngx_rbt_is_red(temp)) {
+                ngx_rbt_black(node->parent);
+                ngx_rbt_black(temp);
+                ngx_rbt_red(node->parent->parent);
+                node = node->parent->parent;
+
+            } else {
+                if (node == node->parent->right) {
+                    node = node->parent;
+                    ngx_rbtree_left_rotate(root, sentinel, node);
+                }
+
+                ngx_rbt_black(node->parent);
+                ngx_rbt_red(node->parent->parent);
+                ngx_rbtree_right_rotate(root, sentinel, node->parent->parent);
+            }
+
+        } else {
+            temp = node->parent->parent->left;
+
+            if (ngx_rbt_is_red(temp)) {
+                ngx_rbt_black(node->parent);
+                ngx_rbt_black(temp);
+                ngx_rbt_red(node->parent->parent);
+                node = node->parent->parent;
+
+            } else {
+                if (node == node->parent->left) {
+                    node = node->parent;
+                    ngx_rbtree_right_rotate(root, sentinel, node);
+                }
+
+                ngx_rbt_black(node->parent);
+                ngx_rbt_red(node->parent->parent);
+                ngx_rbtree_left_rotate(root, sentinel, node->parent->parent);
+            }
+        }
+    }
+
+    ngx_rbt_black(*root);
+}
+```
+
+## 左旋与右旋
+左旋和右旋是红黑树中最重要的两个基本操作，两个操作都只改变了节点的位置（父子）关系而不改变节点的颜色或值（key），可以把左旋和右旋看成两个互逆的操作。
+
+|                               |                               |
+| ----------------------------- | ----------------------------- |
+| ![](/img/svg/rbt_rotate1.svg) | ![](/img/svg/rbt_rotate2.svg) |
+
+对左图的根节点`50`进行右旋可以得到右边的图，对右图的根节点`30`进行左旋可以得到左边的图。左旋和右旋都不改变二叉查找树的位置关系特征。旋转前是二叉查找树，旋转后依然是一棵二叉查找树。根据此，可以用一句话记住左旋和右旋操作：***左旋将一棵二叉查找树的根节点变成新的二叉查找树根节点的左子节点，右旋将一棵二叉查找树的根节点变成新的二叉查找树根节点的右子节点。***
+
+## 删除操作
+
+**移除节点x后如何重建一棵搜索二叉树？**：用x节点右子树最小的节点取代x的位置并将其颜色设为x的颜色，用x节点右子树最小的节点的右子节点取代右子树最小节点的位置。
+
+**右子树最小的节点**：只需从根节点不断取其左子节点的左子节点的左子节点...，直到一个节点的左子节点为NIL(sentinel)，就是这棵树最小的节点。所以**最小的节点没有非NIL的左子节点**，被移走后用其右子节点取代它的位置就可以了。如果右子树最小的节点存在（不是NIL），那么它其实也是按从小到大顺序排在被删除节点后面的那个节点。
+
+![](/img/svg/rbt_d1.svg)
+
+如果从上面的红黑树中删除节点60，其右子树最小的节点70将取代60的位置，70的右子节点80取代70的位置。移除70后重组的二叉树如下：
+
+![](/img/svg/rbt_d2.svg)
+
+这仍然是一棵二叉查找树，但不是一棵红黑树，80到根节点路径上的黑色节点数比别的路径少1个。
