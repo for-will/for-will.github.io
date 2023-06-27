@@ -7,6 +7,8 @@ author: "will"
 tags: [linux, asm, nasm]
 ---
 
+尝试用nasm重写linux-0.12内核中as86的内核代码，记录其中的一些不熟悉的汇编知识和nasm语法。
+
 LDS, LES, LFS, LGS, LSS: Load Far Pointer
 -----------------------------------------
 ```nasm
@@ -33,7 +35,7 @@ mov bx, 0x78
 lgs si, [fs:bx]     ; 从内存0x00078处读取2字节数据到si，之后的2字节数据到gs
 ```
 对应内核中86as的代码: `linux/boot/bootsect.S:87`
-```nasm
+```as86
 push	#0
 pop	fs
 mov	bx,#0x78		! fs:bx is parameter table address
@@ -82,7 +84,7 @@ mov di, dx
 mov byte [di+4], 18
 ```
 
-`movsw`默认从内存地址`[ds:si]`处复制两个字节数据到内存地址`[es:di]`处,如果要从内存`[gs:si]`处复制数据到`[es:di]`,则加上前缀`gs`。`rep gs movsw`表示从内存`[gs:si]`处复制`cx*2`字节数据到内存`[es:di]`处。参考[The Netwide Assembler: NASM](!http://www.cburch.com/csbsju/cs/350/docs/nasm/nasmdoca.html#section-A.105)
+`movsw`默认从内存地址`[ds:si]`处复制两个字节数据到内存地址`[es:di]`处,如果要从内存`[gs:si]`处复制数据到`[es:di]`,则加上前缀`gs`。`rep gs movsw`表示从内存`[gs:si]`处复制`cx*2`字节数据到内存`[es:di]`处。参考[The Netwide Assembler: NASM](!http://www.cburch.com/csbsju/cs/350/docs/nasm/nasmdoca.html#section-A.105)。
 
 **调试**：`gs=0xf000`,`si=0xefde`,用`xp /12hx 0xfefde`查看`gs:si`处的内存，将数据复制到`0x7c0:0xfef4`处，其实就是栈的上面，用`print-stack`命令就可以查看，或者用命令`xp /12bx 0x17af4`。可以看到`0x17af8`处的值已经是0x12,即18。
 
@@ -109,6 +111,19 @@ Stack address size 2
  | STACK 0x17b0e [0x0000] (<unknown>)
  | STACK 0x17b10 [0x0000] (<unknown>)
  | STACK 0x17b12 [0x0000] (<unknown>)
+<bochs:31> xp /12bx 0x17af4
+[bochs]:
+0x0000000000017af4 <bogus+       0>:	0xaf	0x02	0x25	0x02	0x12	0x1b	0xff	0x6c
+0x0000000000017afc <bogus+       8>:	0xf6	0x0f	0x08	0x4f
+```
+
+JNC&JL&JE&JZ&JLE
+---
+```nasm
+add cx, bx
+jnc ok2_read        ; jl ok2_read
+je ok2_read         ; jz ok2_read
+                    ; 合并成一条指令：jle ok2_read
 ```
 
 文档
